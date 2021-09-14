@@ -1,0 +1,79 @@
+﻿@model Article
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Edit article local storage</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    Title
+                    <input asp-for="Title" class="form-control" id="articletitle" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Content
+                    <input asp-for="Content" class="form-control" id="articlecontent" />
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Image
+                    <input asp-for="Image" type="file" class="form-control" accept="image/png, image/jpeg" id="articleimage" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input onclick="editar()" class="btn btn-success" name="name" value="Edit article" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        var urlImagen = "";
+        document.querySelector("#articleimage").addEventListener("change", function () {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                urlImagen = reader.result;
+            });
+            reader.readAsDataURL(this.files[0]);
+        });
+
+        var valorEditar = "@TempData["valor"]";
+        var item = localStorage.getItem(valorEditar)
+        var data = JSON.parse(item);
+        document.getElementById("articletitle").value = data.title;
+        document.getElementById("articlecontent").value = data.content;
+        document.getElementById("articleimage").value = data.image;
+        function editar() {
+            var titulo = document.getElementById("articletitle").value;
+            var contenido = document.getElementById("articlecontent").value;
+            var imagen = document.getElementById("articleimage").value;
+            if (titulo != "" && contenido != "" && imagen != "") {
+                let article = {
+                    id: data.id,
+                    title: titulo,
+                    content: contenido,
+                    image: urlImagen
+                }
+                localStorage.setItem(valorEditar, JSON.stringify(article));
+                alert("Articulo editado correctamente");
+                window.location.href = "../ArticlesLocalStorage/Manage", true;
+            }   
+        }
+    </script>
+}

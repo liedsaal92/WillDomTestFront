@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Articles>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Lista de articulos REMOTE</h1>
+        </div>
+        <div class="col-sm-6">
+            @*<a class="btn btn-dark d-block" asp-action="Manage" asp-controller="Remote">Administrar nuevos articulos</a>*@
+        </div>
+    </div>
+</div>
+
+
+<div class="listBlogs">
+    <div class="container article">
+        @if (Model.Count() > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <div class="row article-section">
+                    <div class="col-4 article-content">
+                        <h3 class="article__title"><span>@item.title</span></h3>
+                        <div class="article__dek"><p>@item.description</p></div>
+                        <div class="article__meta"><span class="by">By</span>@item.source.name</div>
+                    </div>
+                    <div class="col-8 article-image">
+                        <img src="@item.image" alt="Alternate Text" class="adaptar" />
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No existen registros</p>
+        }
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                @if ((Convert.ToInt32(TempData["currentpage"]) == 1))
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="Remote?page=@(Convert.ToInt32(TempData["currentpage"]) - 1)" tabindex="-1">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="Remote?page=@(Convert.ToInt32(TempData["currentpage"]) - 1)" tabindex="-1">Previous</a>
+                    </li>
+                }
+                <li class="page-item"><a class="page-link" href="Remote?page=1">1</a></li>
+                <li class="page-item"><a class="page-link" href="Remote?page=2">2</a></li>
+                <li class="page-item"><a class="page-link" href="Remote?page=3">3</a></li>
+                @if ((Convert.ToInt32(TempData["currentpage"]) == 4))
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="Remote?page=@(Convert.ToInt32(TempData["currentpage"]) + 1)">Next</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="Remote?page=@(Convert.ToInt32(TempData["currentpage"]) + 1)">Next</a>
+                    </li>
+                }
+
+
+                
+            </ul>
+        </nav>
+        <br />
+        <br />
+    </div>
+</div>

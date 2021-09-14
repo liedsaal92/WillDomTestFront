@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Article>
+@{
+    ViewData["Title"] = "Manage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Manage articles DB</h1>
+        </div>
+        <div class="col-sm-6">
+            <a class="btn btn-success  btn-sm d-block" asp-action="Create" asp-controller="ArticlesLocalStorage">Crear nuevos articulos</a>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(m => m.Id)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Title)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Content)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.Image)</th>
+        </tr>
+    </thead>
+    <tbody id="idtabla">
+    </tbody>
+</table>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        $(document).ready(function () {
+            load();
+        });
+
+        function load() {
+            var id = parseInt(localStorage.getItem("autoincremento"));
+            var tabla = document.getElementById("idtabla");
+            var contenidotabla = "";
+            for (var i = 1; i <= id; i++) {
+                var item = localStorage.getItem("Articles" + i)
+                var data = JSON.parse(item);
+                if (data != "null" && data != null) {
+                    var datos = "<tr>" +
+                        "<th scope='row'>" + data.id + "</th>" +
+                        "<td>" + data.title + "</td>" +
+                        "<td>" + data.content + "</td>" +
+                        "<td>" +
+                        "<a asp-controller='Articles' asp-action='Edit' asp-route-id='' class='btn btn-primary btn-sm' onclick='editar(\"Articles" + i + "\")'>Editar</a>" +
+                        "<a asp-controller='Articles' asp-action='Delete' asp-route-id='' class='btn btn-danger  btn-sm' onclick='eliminar(\"Articles" + i + "\")'>Eliminar</a>" +
+                        "</td>" +
+                        "</tr>";
+                    contenidotabla = contenidotabla + datos;
+                }
+            }
+            tabla.innerHTML = contenidotabla;
+        }
+        
+        function editar(valor) {
+            window.location.href = "../ArticlesLocalStorage/Edit?id="+valor, true;
+        }
+
+        function eliminar(valor) {
+            var r = confirm("Esta seguro de eliminar");
+            if (r == true) {
+                
+                localStorage.removeItem(valor);
+                alert("Articulo eliminado");
+                load();
+            } else {
+                alert("NO SE HA eliminado el articulo");
+            }
+        }
+
+    </script>
+
+}
+
+

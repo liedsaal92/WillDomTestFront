@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Lista de articulos local storage</h1>
+        </div>
+        <div class="col-sm-6">
+            <a class="btn btn-dark d-block" asp-action="Manage" asp-controller="ArticlesLocalStorage">Administrar nuevos articulos</a>
+        </div>
+    </div>
+</div>
+
+<div class="listBlogs">
+    <div class="container article" id="seccionarticulos">
+
+    </div>
+</div>
+<br />
+<br />
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        $(document).ready(function () {
+            load();
+        });
+
+        function load() {
+            var id = parseInt(localStorage.getItem("autoincremento"));
+            var tabla = document.getElementById("seccionarticulos");
+            var contenidotabla = "";
+            for (var i = 1; i <= id; i++) {
+                var item = localStorage.getItem("Articles" + i)
+                var data = JSON.parse(item);
+                if (data != "null" && data != null) {
+                    var datos = "<div class='row article-section'>" +
+                        "<div class='col-4 article-content'>" +
+                        "<h3 class='article__title'><span>" + data.title + "</span>" + data.title + "</h3>" +
+                        "<div class='article__dek'><p>" + data.content + "</p></div>" +
+                        "<div class='article__meta'><span class='by'>By</span>" + data.content + "</div>" +
+                        "</div>" +
+                        "<div class='col-8 article-image'>" +
+                        //"<img src='https://hodinkee.imgix.net/uploads/images/779fa657-4a26-41b4-ba18-64db969071d5/1515544005_phantom_thread_unit_daniel_day_lewis_vicky_krieps_12.jpg?auto=format&ch=Width%2CDPR%2CSave-Data&dpr=2.0&fit=crop&fm=jpg&h=315&ixjsv=2.2.4&ixlib=rails-1.1.0&q=50&usm=12&w=650' alt='Alternate Text' class='adaptar' />" +
+                        "<img src=" + data.image + " alt='Alternate Text' class='adaptar' />" +
+                        "</div>" +
+                        "</div>";
+                    contenidotabla = contenidotabla + datos;
+                }
+            }
+            tabla.innerHTML = contenidotabla;
+        }
+    </script>
+}
